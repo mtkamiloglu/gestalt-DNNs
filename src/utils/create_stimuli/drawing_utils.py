@@ -1,7 +1,11 @@
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.pyplot as plt
-
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+print("\nSystem Path: ", sys.path)
 
 class ConstrainedError(Exception):
     pass
@@ -1675,12 +1679,12 @@ class DrawShape():
 ##
 
         def add_curly_bracket(self, im):
-            font_path = './calibri.ttf'
+            #font_path = '/Library/Fonts/Arial Unicode.ttf'
             rot = 0
             font_size = 135
             cc = self.create_canvas(img_size=sz_fact, borders=False)
             draw = ImageDraw.Draw(cc)
-            arial = ImageFont.truetype(font_path, font_size)
+            arial = ImageFont.load_default()
             draw.text((sz_fact[0] / 2, sz_fact[1] / 2), '{', font=arial, anchor="mm", fill=(self.line_col,)*3)
             cc = cc.rotate(rot, resample=2, center=(sz_fact[0] // 2, sz_fact[1] // 2))
 

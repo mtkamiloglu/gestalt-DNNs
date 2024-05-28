@@ -1,4 +1,9 @@
 import pickle
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 from src.utils.create_stimuli.drawing_utils import *
 from src.utils.Config import Config
 from src.utils.misc import *
@@ -33,7 +38,7 @@ def collect(pretraining, network_name, type_ds):
                     draw_obj=DrawShape(background='black' if bk == 'black' or bk == 'random' else bk, img_size=img_size, width=10),
                     transf_code=transf)
 
-    exp_folder = f'./results//{config_to_path_special(config)}'
+    exp_folder = f'../results/{config_to_path_special(config)}'
     cs = pickle.load(open(exp_folder + f'_{distance_type}.df', 'rb'))
     all_layers = list(cs[type_ds].keys())
 

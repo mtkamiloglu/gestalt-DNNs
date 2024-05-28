@@ -1,4 +1,9 @@
 import pickle
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 from src.utils.create_stimuli.drawing_utils import *
 from src.utils.misc import *
 from src.utils.Config import Config
@@ -22,8 +27,8 @@ def collect(network_name, type_ds, dist_type):
                     is_pycharm=True if 'PYCHARM_HOSTED' in os.environ else False,
                     background=bk,
                     draw_obj=DrawShape(background='black' if bk == 'black' or bk == 'random' else bk, img_size=img_size, width=14))
-    exp_folder = f'./results//{config_to_path_hierarchical(config)}'
-    cs = pickle.load(open(exp_folder + f'{dist_type}.df', 'rb'))
+    exp_folder = f'../results/{config_to_path_hierarchical(config)}'
+    cs = pickle.load(open(exp_folder + '/'+f'{dist_type}.df', 'rb'))
     # all_layers = list(cs['empty'].keys())
     # diff_penultimate = np.array(cs['base'][all_layers[-2]]) - np.array(cs['composite'][all_layers[-2]])
 
@@ -79,8 +84,16 @@ def set_boxplot():
     plt.gcf().set_size_inches(8.5*1.1, 5*1.1)
 
     for idx, net in enumerate(network_names[:split]):
-        m, s, pv, distr = np.hsplit(np.array([collect(net, k, distance_type) for k in all_types_ds]), 4)
-        plot_net_set(m.flatten(), s.flatten(), idx, pv.flatten(), distr.flatten(), axx['A'])
+
+        x1 = [collect(net, k, distance_type) for k in all_types_ds]
+        
+        m, s, pv, distr = zip(*x1)
+        m = np.array(m)
+        s = np.array(s)
+        pv = np.array(pv)
+        distr = np.array(distr)
+
+        plot_net_set(m.flatten(), s.flatten(), idx, pv.flatten(), distr, axx['A'])
 
     for idx, net in enumerate(network_names[split+1:]):
         m, s, pv, distr = np.hsplit(np.array([collect(net, k, distance_type) for k in all_types_ds]), 4)

@@ -1,4 +1,9 @@
 import torch.nn
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 from src.old.train_gestalt.train_utils import run
 from src.utils.Config import Config
 from src.utils.net_utils import prepare_network

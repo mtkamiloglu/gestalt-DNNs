@@ -1,9 +1,13 @@
 import pickle
+import seaborn as sns
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from src.utils.create_stimuli.drawing_utils import *
 from src.utils.Config import Config
 from src.utils.misc import *
 from src.utils.net_utils import get_layer_from_depth_str
-import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 color_cycle = np.array(plt.rcParams['axes.prop_cycle'].by_key()['color'])
 import seaborn as sns
@@ -27,6 +31,9 @@ def compute_base_comp(base, comp, net):
     ttest_pv = ttest_1samp(CE, 0)
     CE_m = np.mean(CE)
     CE_std = np.std(CE)
+
+    print(f"CE_m: {CE_m}, CE_std: {CE_std}, ttest_pv.pvalue: {ttest_pv.pvalue}, CE: {CE}")
+    
     return CE_m, CE_std, ttest_pv.pvalue, CE
 
 def collect(pretraining, network_name, type_ds):
@@ -43,7 +50,7 @@ def collect(pretraining, network_name, type_ds):
                     draw_obj=DrawShape(background='black' if bk == 'black' or bk == 'random' else bk, img_size=img_size, width=10),
                     transf_code=transf)
 
-    exp_folder = f'./results//{config_to_path_special(config)}'
+    exp_folder = f'../results/{config_to_path_special(config)}'
     cs = pickle.load(open(exp_folder + f'_{distance_type}.df', 'rb'))
     all_layers = list(cs[type_ds].keys())
 
@@ -85,12 +92,27 @@ def set_boxplot():
 
     for idx, net in enumerate(network_names[:split]):
         iii = [[i for i in re.findall('([a-zA-Z0-9]+)-([a-zA-Z0-9]+)', k)[0]] for k in interesting_sets]
-        m, s, pv, distr = np.hsplit(np.array([compute_base_comp(f'array{ii[0]}', f'array{ii[1]}', net) for ii in iii]), 4)
-        plot_net_set(m.flatten(), s.flatten(), idx, distr.flatten(), ax=axx['A'])
+        x1 = [compute_base_comp(f'array{ii[0]}', f'array{ii[1]}', net) for ii in iii]
+
+        m, s, pv, distr = zip(*x1)
+
+        # Convert to numpy arrays
+        m = np.array(m)
+        s = np.array(s)
+        pv = np.array(pv)
+        distr = np.array(distr)
+
+
+
+        plot_net_set(m.flatten(), s.flatten(), idx, distr, ax=axx['A'])
+
 
     for idx, net in enumerate(network_names[split+1:]):
         iii = [[i for i in re.findall('([a-zA-Z0-9]+)-([a-zA-Z0-9]+)', k)[0]] for k in interesting_sets]
-        m, s, pv, distr = np.hsplit(np.array([compute_base_comp(f'array{ii[0]}', f'array{ii[1]}', net) for ii in iii]), 4)
+        results = np.array([compute_base_comp(f'array{ii[0]}', f'array{ii[1]}', net) for ii in iii])
+        
+        print(f"Results for {net}: {results}")
+        m, s, pv, distr = np.hsplit(results, 4)
         plot_net_set(m.flatten(), s.flatten(), idx, distr.flatten(), ax=axx['B'])
 
     from matplotlib.lines import Line2D
@@ -203,12 +225,12 @@ bk = 'random'
 network_names = list(brain_score_nn.keys())
 depth_layer = 'last_l'
 interesting_sets = list(human_CSE_exp2.keys())[:5]
-save_name = f'boxplot_{depth_layer}_{distance_type}_first5.svg'
+save_name = f'boxplot_{depth_layer}_{distance_type}_first5'
 set_boxplot()
 
 ### last 5 sets
 interesting_sets = list(human_CSE_exp2.keys())[-5:]
-save_name = f'boxplot_{depth_layer}_{distance_type}_last5.svg'
+save_name = f'boxplot_{depth_layer}_{distance_type}_last5'
 set_boxplot()
 
 ##

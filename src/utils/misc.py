@@ -77,23 +77,24 @@ brain_score_nn = {
     'densenet201': 0.421,
     'inception_v3': 0.414,
     'vonenet-resnet50': 0.405,
-    'cornet-s': 0.402,
-    'vgg19bn': 0.402,
-    'vonenet-cornets': 0.390,
-    'alexnet': 0.381,
-    'vit_b_32': 0.355,
-    'vit_l_32': 0.198,
-    'prednet': 0.195,
-    'vit_b_16': 0.190,
-    'vit_l_16': 0.161,
-    'simCLR_resnet18_stl10': 0.160,
-    'dino_vitb8': np.nan,
-    'dino_vits8': np.nan}
+    #'cornet-s': 0.402,
+    #'vgg19bn': 0.402,
+    #'vonenet-cornets': 0.390,
+    #'alexnet': 0.381,
+    #'vit_b_32': 0.355,
+    #'vit_l_32': 0.198,
+    #'prednet': 0.195,
+    #'vit_b_16': 0.190,
+    #'vit_l_16': 0.161,
+    #'simCLR_resnet18_stl10': 0.160,
+    #'dino_vitb8': np.nan,
+    #'dino_vits8': np.nan
+    }
 
 transformers = ['vit_b_32', 'vit_l_32', 'vit_b_16', 'vit_l_16', 'dino_vitb8', 'dino_vits8']
 recurrent = ['cornet-s', 'vonenet-cornets', 'cornet-s', 'prednet']
 
-main_text_nets = ['vgg19bn', 'resnet152', 'inception_v3', 'densenet201', 'cornet-s', 'vonenet-resnet50', 'vit_l_32', 'dino_vitb8']
+main_text_nets = ['densenet201','inception_v3', 'resnet152', 'vonenet-resnet50']#,, 'vit_l_32', 'dino_vitb8']
 appendix_nets = ['alexnet',  'vonenet-cornets', 'vit_b_16', 'vit_b_32', 'vit_l_16', 'dino_vits8', 'simCLR_resnet18_stl10', 'prednet']
 all_nets = ['alexnet', 'vgg19bn', 'resnet152', 'inception_v3', 'densenet201', 'cornet-s', 'vonenet-cornets', 'vonenet-resnet50', 'vit_b_16', 'vit_b_32', 'vit_l_16', 'vit_l_32'] #, 'dino_vits8', 'dino_vitb8', 'simCLR_resnet18_stl10', 'prednet']
 
@@ -228,52 +229,51 @@ def standard_step(data, model, loss_fn, optimizer, use_cuda, logs, logs_prefix, 
 
 def config_to_path_special_par(config):
     return f"{config.distance_type}/special_par/{config.network_name}" \
-        + '//' \
+        + '/' \
         + f'{config.background}' \
         + f'_{config.pretraining}' \
-        + '//' \
+        + '/' \
         + f'{config.transf_code}_{config.type_ds[0]}' \
-        + '//' \
+        + '/' \
         + f'{config.type_ds_args["dist"]:.2f}_'
 
 def config_to_path_special(config):
     return f"{config.distance_type}/special/{config.network_name}" \
-        + '//' \
+        + '/' \
         + f'{config.background}' \
         + f'_{config.pretraining}' \
-        + '//' \
+        + '/' \
         + f'{config.transf_code}' \
-        + '//' \
+        + '/' \
         + f'{config.type_ds}'
 
 def config_to_path_shape_fam(config):
     return f"shape_fam/{config.network_name}" \
-        + '//' \
+        + '/' \
         + f'{config.background}' \
         + f'_{config.pretraining}' \
         + '_' \
         + f'{config.transf_code}' \
-        + '//' \
+        + '/' \
         + f'{config.type_ds}' \
-        + '//' \
+        + '/' \
         + f'{config.type_ds_args}'
 
 
 
 def config_to_path_train(config):
     return f"dataset/{config.type_ds}" \
-        + '//' \
+        + '/' \
         + f'{config.network_name}'
 
 
 
 def config_to_path_hierarchical(config, tmp_tags=None):
     return f"{config.distance_type}/hierarchical/{config.network_name}" \
-        + '//' \
+        + '/' \
         + f'{config.background}' \
         + f'_{config.pretraining}' \
-        + (f'_{tmp_tags}' if tmp_tags else '') \
-        + '//'
+        + (f'_{tmp_tags}' if tmp_tags else '') 
 
 
 from src.utils.net_utils import GrabNet

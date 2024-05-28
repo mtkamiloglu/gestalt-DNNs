@@ -1,4 +1,9 @@
 import pickle
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 from src.utils.Config import Config
 from src.utils.misc import *
 
@@ -20,8 +25,8 @@ def collect(network_name, type_ds, background, depth_layer):
                     is_pycharm=True if 'PYCHARM_HOSTED' in os.environ else False,
                     type_ds=type_ds,
                     background=background)
-    exp_folder = f'./results//{config_to_path_hierarchical(config)}'
-    cs = pickle.load(open(exp_folder + 'cossim.df', 'rb'))
+    exp_folder = f'../results/{config_to_path_hierarchical(config)}'
+    cs = pickle.load(open(exp_folder +'/'+ 'cossim.df', 'rb'))
     all_layers = list(cs[type_ds].keys())
     ll = get_layer_from_depth_str(all_layers, depth_layer)
 

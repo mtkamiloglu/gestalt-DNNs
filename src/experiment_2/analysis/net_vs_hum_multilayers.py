@@ -1,4 +1,9 @@
 import pickle
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 import matplotlib.patches as patches
 from src.utils.create_stimuli.drawing_utils import *
 from src.utils.Config import Config
@@ -15,7 +20,7 @@ from scipy.stats import spearmanr, kendalltau
 
 def compute_base_comp(base, comp, net):
     img_size = np.array((224, 224), dtype=int)
-    pt = 'kitti' if net == 'prednet' else pretraining
+    pt = 'kitti' if net == 'prednet' else "ImageNet"
 
     config = Config(project_name='Pomerantz',
                     verbose=False,
@@ -29,8 +34,8 @@ def compute_base_comp(base, comp, net):
                     draw_obj=DrawShape(background='black' if bk == 'black' or bk == 'random' else bk, img_size=img_size, width=10),
                     transf_code=transf)
 
-    exp_folder_norm = f'./results//{config_to_path_hierarchical(config)}'
-    cs = pickle.load(open(exp_folder_norm + f'{distance_type}.df', 'rb'))
+    exp_folder_norm = f'./results/{config_to_path_hierarchical(config)}'
+    cs = pickle.load(open(exp_folder_norm +'/t/'+ f'{distance_type}.df', 'rb'))
     all_layers = list(cs['empty'].keys())
     ll = get_layer_from_depth_str(all_layers, depth_layer)
     normalization_factor = np.mean(cs['empty'][ll] - np.array(cs['empty-single'][ll]))

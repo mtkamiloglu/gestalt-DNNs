@@ -1,4 +1,8 @@
 import pickle
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from src.utils.create_stimuli.drawing_utils import *
 from src.utils.Config import Config
 from src.utils.misc import *
@@ -19,8 +23,8 @@ def collect(network_name):
                     is_pycharm=True if 'PYCHARM_HOSTED' in os.environ else False,
                     background=bk,
                     draw_obj=DrawShape(background='black' if bk == 'black' or bk == 'random' else bk, img_size=img_size, width=14))
-    exp_folder = f'./results//{config_to_path_hierarchical(config)}'
-    cs = pickle.load(open(exp_folder + f'{distance_type}.df', 'rb'))
+    exp_folder = f'../results/{config_to_path_hierarchical(config)}'
+    cs = pickle.load(open(exp_folder + '/'+ f'{distance_type}.df', 'rb'))
     all_layers = list(cs['empty'].keys())
 
     normalization_factor = np.mean([np.array(cs['empty'][ll]) - np.array(cs['empty-single'][ll]) for ll in all_layers], axis=1)
@@ -140,6 +144,6 @@ leg2.get_frame().set_linewidth(1.5)
 
 plt.tight_layout()
 
-plt.savefig(f'.//figures/single_figs/hierarchicalCSE_multilayer_{bk}.svg')
+plt.savefig(f'./figures/single_figs/hierarchicalCSE_multilayer_{bk}.svg')
 plt.show()
 

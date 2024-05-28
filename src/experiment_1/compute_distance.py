@@ -1,4 +1,11 @@
 import torch.random
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+print(sys.path)
+
+
 
 from src.utils.Config import Config
 # from src.compute_cossim_dots_hierarchical import generate_dataset_rndset
@@ -24,7 +31,7 @@ def run_distance(network_name,
                     pretraining=pretraining,  # get_model_path(config, resume=True)
                     weblogger=0,
                     is_pycharm=True if 'PYCHARM_HOSTED' in os.environ else False,
-                    rep=500,
+                    rep=100,
                     draw_obj=DrawShape(background=background, img_size=img_size, width=10, min_dist_bw_points=20, min_dist_borders=40))
     torch.manual_seed(0)
     np.random.seed(0)

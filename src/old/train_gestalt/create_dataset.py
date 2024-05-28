@@ -2,12 +2,16 @@ import numpy as np
 import shutil
 import os
 import pathlib
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
 from src.utils.create_stimuli.drawing_utils import *
 img_size = np.array((224, 224), dtype=int)
 width = int(img_size[0] * 0.06)
 
 dr = DrawShape(background='random', img_size=img_size, width=10)
-N_train = 2000
+N_train = 200
 N_test = N_train / 10
 
 

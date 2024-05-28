@@ -1,4 +1,11 @@
 #%% 
+
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+print(sys.path)
+
 from src.utils.Config import Config
 from src.experiment_2.distance_helper import generate_dataset_rnd
 from src.utils.create_stimuli.drawing_utils import *
@@ -19,7 +26,7 @@ def run_cossim(network_name, pretraining, type_ds, background, distance_type, tr
                     type_ds=type_ds,
                     background=background,
                     draw_obj=DrawShape(background='black' if background == 'black' or background == 'random' else background, img_size=img_size, width=10),
-                    rep=500,
+                    rep=100,
                     transf_code=transf_code,
                     type_ds_args=type_ds_args)
 
@@ -40,7 +47,7 @@ background = ['random'] #, 'white', 'black']
 distance_type = ['euclidean', 'cossim'] #,'cossim'
 type_ds = [f'array{i}' for i in range(1, 19)]
 type_ds.extend(['arrayF', 'arrayA', 'arrayB', 'arrayC', 'arrayD', 'arrayE'])
-type_ds.extend(['curly_composite_with_space', 'array4_curly', 'array11_curly'])
+#type_ds.extend(['curly_composite_with_space', 'array4_curly', 'array11_curly'])
 transf_code = ['t'] # 'none', 't', 's', 'r']
 nets = list(brain_score_nn.keys())  # all_nets + self_superv_net,
 all_exps = (product(pretraining, nets, type_ds, background, distance_type, transf_code))
